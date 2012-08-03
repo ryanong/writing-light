@@ -1,0 +1,12 @@
+{
+  "name": "connecting-light",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "mysql": "2.0.0-alpha3"
+  }
+}
