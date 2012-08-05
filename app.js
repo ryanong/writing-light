@@ -54,6 +54,32 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+app.post('/', function(req, res) {
+  req.sanitize('m').toString();
+  req.sanitize('r').toInt();
+  req.sanitize('g').toInt();
+  req.sanitize('b').toInt();
+
+  pool.acquire(function(err, client) {
+    if (err) {
+      throw err;
+    } else {
+      message = {
+        message: req.param("m"),
+        red: req.param("r"),
+        blue: req.param("b"),
+        green: req.param("g"),
+      }
+      client.query("INSERT INTO message SET ?", message, function(err, rows) {
+        // return object back to pool
+        pool.release(client);
+        if (err) throw err;
+        res.json(rows);
+      });
+    }
+  });
+});
+
 app.get('/', function(req, res){
   req.sanitize('since').toInt();
   req.sanitize('last').toInt();
@@ -90,10 +116,8 @@ app.get('/', function(req, res){
 
   pool.acquire(function(err, client) {
     if (err) {
-      // handle error - this is generally the err from your
-      // factory.create function
-    }
-    else {
+      throw err;
+    } else {
       client.query('SELECT message.*, UNIX_TIMESTAMP(postdate) timestamp FROM message' + sql, function(err, rows) {
         // return object back to pool
         pool.release(client);
