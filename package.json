@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "express": "3.x",
-    "mysql": "2.0.0-alpha3"
+    "mysql": "2.0.0-alpha3",
+    "express-validator": "latest",
+    "generic-pool": "latest"
   }
 }
